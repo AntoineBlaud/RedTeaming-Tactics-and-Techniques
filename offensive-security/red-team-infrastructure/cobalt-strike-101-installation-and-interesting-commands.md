@@ -228,7 +228,14 @@ Event logs will show how many times the profiler has been used by victims:
 
 ![](<../../.gitbook/assets/Screenshot from 2019-01-07 21-52-50.png>)
 
+## c2Concealer
+
+C2concealer is a command line tool that generates randomized C2 malleable profiles for use in Cobalt Strike.
+
+{% embed url="https://github.com/FortyNorthSecurity/C2concealer" %}
+
+
+
 ## References
 
 [https://www.cobaltstrike.com/downloads/csmanual313.pdf](https://www.cobaltstrike.com/downloads/csmanual313.pdf)
-
