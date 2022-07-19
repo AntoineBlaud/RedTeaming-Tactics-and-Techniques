@@ -30,7 +30,7 @@ Below provides a high level overview of how the attack works:
 
 Below graphic visualizes the concept:
 
-![PetitPotam: NTLM Relay to AD CS flow diagram](<../../.gitbook/assets/image (1084) (1).png>)
+![PetitPotam: NTLM Relay to AD CS flow diagram](<../../.gitbook/assets/image (1084) (1) (1).png>)
 
 ## Domain Takeover
 
@@ -562,6 +562,12 @@ RBCD for local privilege escalation could also be performed**:**
 {% endhint %}
 
 Note to self: what a beautiful attack vector this is.
+
+## PetitPotam blocked?
+
+You can now also use:
+
+{% embed url="https://github.com/Wh04m1001/DFSCoerce" %}
 
 ## References
 
