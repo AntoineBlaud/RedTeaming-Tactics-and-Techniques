@@ -2,7 +2,7 @@
 description: Credential Access, Keylogger
 ---
 
-# Pulling Web Application Passwords by Hooking  HTML Input Fields
+# Pulling Web Application Passwords by Hooking HTML Input Fields
 
 A technique for stealing web application passwords from compromised systems by hooking input `password` fields in HTML applications and effectively implementing a simple keylogger.
 
@@ -22,9 +22,9 @@ The technique is useful and can be executed when:
 
 Password fields in web applications are `input` fields with attribute `type` set to `password` as shown below:
 
-![HTML markup snippet from github.com](<../../.gitbook/assets/image (417).png>)
+![HTML markup snippet from github.com](<../../.gitbook/assets/image (416).png>)
 
-All HTML elements can respond to various types of events **** and execute code when those occur. For example, input fields can respond to events such `onFocus` (when an element gets focus), `onBlur` (when an element loses focus) and many other events amongst which are various keyboard events `onKeyPress`, `onKeyDown`, and `onKeyUp`.&#x20;
+All HTML elements can respond to various types of events \*\*\*\* and execute code when those occur. For example, input fields can respond to events such `onFocus` (when an element gets focus), `onBlur` (when an element loses focus) and many other events amongst which are various keyboard events `onKeyPress`, `onKeyDown`, and `onKeyUp`.
 
 For more about events - [https://www.w3schools.com/tags/ref\_eventattributes.asp](https://www.w3schools.com/tags/ref\_eventattributes.asp)
 
@@ -80,7 +80,7 @@ localStorage.pw
 
 ### LocalStorage Files on the Disk
 
-The `localStorage` information is also stored on the disk. For Chrome, the files of are located here  C:\Users\spotless\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb and is stored in a file XXXXXX.log. In my case, it was the file `009691.log`
+The `localStorage` information is also stored on the disk. For Chrome, the files of are located here C:\Users\spotless\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb and is stored in a file XXXXXX.log. In my case, it was the file `009691.log`
 
 Below shows `password` (lime) for github.com (blue) stored in `localStorage` key `pw` (orange):
 
@@ -100,8 +100,8 @@ Use encrypted communications when transferring the password out of the compromis
 
 ## Detection
 
-For a start, the .log file (009691.log in my case) in C:\Users\spotless\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb, contains the actual hooking code we inserted into Chrome's dev console for the target web application:&#x20;
+For a start, the .log file (009691.log in my case) in C:\Users\spotless\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb, contains the actual hooking code we inserted into Chrome's dev console for the target web application:
 
 ![](<../../.gitbook/assets/image (421).png>)
 
-...suggesting that one could monitor C:\Users\\\<user>\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb for \*.log files that contain jQuery/vanilla JavaScript `password` field selector and keywords `onkeypress`, `onkeyup`, `onkeydown`.&#x20;
+...suggesting that one could monitor C:\Users\\\<user>\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb for \*.log files that contain jQuery/vanilla JavaScript `password` field selector and keywords `onkeypress`, `onkeyup`, `onkeydown`.

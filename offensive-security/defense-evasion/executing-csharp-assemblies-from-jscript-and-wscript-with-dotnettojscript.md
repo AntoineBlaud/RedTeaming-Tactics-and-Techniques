@@ -16,16 +16,16 @@ Since [SharpShooter](https://github.com/mdsecactivebreach/SharpShooter), [Cactus
 \\VBOXSVR\Experiments\DotNetToJScript\DotNetToJScript\bin\Debug\DotNetToJScript.exe \\VBOXSVR\Experiments\DotNetToJScript\ExampleAssembly\bin\Debug\ExampleAssembly.dll -l vbscript -o \\VBOXSVR\Experiments\DotNetToJScript\DotNetToJScript\test.vbs
 ```
 
-![](<../../.gitbook/assets/Annotation 2019-05-19 135204.png>)
+![](../../.gitbook/assets/annotation-2019-05-19-135204.png)
 
 We got a test.vbs created and if we look inside it, we can see that at a high level:
 
-* the C# binary is now present as a base64 encoded data blob&#x20;
-* the data blobob will be deserialized and invoked using `DynamicInvoke`&#x20;
-* which will create a new instance of the `TestClass`&#x20;
+* the C# binary is now present as a base64 encoded data blob
+* the data blobob will be deserialized and invoked using `DynamicInvoke`
+* which will create a new instance of the `TestClass`
 * which will kick off the `MessageBox` as defined in the `TestClass` constructor
 
-![](<../../.gitbook/assets/Annotation 2019-05-19 140645.png>)
+![](../../.gitbook/assets/annotation-2019-05-19-140645.png)
 
 ```javascript
 entry_class = "TestClass"
@@ -39,23 +39,21 @@ Set d = fmt.Deserialize_2(Base64ToStream(s))
 Set o = d.DynamicInvoke(al.ToArray()).CreateInstance(entry_class)
 ```
 
-![](<../../.gitbook/assets/Annotation 2019-05-19 145407.png>)
+![](../../.gitbook/assets/annotation-2019-05-19-145407.png)
 
 ## Execution & Observation
 
 Let's now run the test.vbs - it pops the message box as expected:
 
-
-
-![](<../../.gitbook/assets/Annotation 2019-05-19 135844.png>)
+![](../../.gitbook/assets/annotation-2019-05-19-135844.png)
 
 Looking at the loaded modules of the wscript.exe, we can see a number of .NET assemblies in the process memory, which makes sense if you think about it:
 
-![](<../../.gitbook/assets/Annotation 2019-05-19 141447.png>)
+![](../../.gitbook/assets/annotation-2019-05-19-141447.png)
 
-Now, what happens if we try executing a simple vbscript that pops a message box and inspect the loaded modules of the wscript.exe again?  Bingo, no .NET assemlies loaded:
+Now, what happens if we try executing a simple vbscript that pops a message box and inspect the loaded modules of the wscript.exe again? Bingo, no .NET assemlies loaded:
 
-![](<../../.gitbook/assets/Annotation 2019-05-19 142153.png>)
+![](../../.gitbook/assets/annotation-2019-05-19-142153.png)
 
 Looking from the defensive point of view, it may be worth checking the environment for machines executing wscript (or jscript or cscript) which load .NET assemblies in their memory space and make sure the activity is benign.
 
@@ -66,4 +64,3 @@ Know of any other hlepful artefacts? Let me know.
 ## References
 
 {% embed url="https://github.com/tyranid/DotNetToJScript" %}
-

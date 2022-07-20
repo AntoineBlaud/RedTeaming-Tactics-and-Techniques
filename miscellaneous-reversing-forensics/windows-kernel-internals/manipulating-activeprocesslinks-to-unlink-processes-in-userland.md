@@ -9,13 +9,13 @@ Lab is performed on Windows 10 Professional x64, 1903.
 {% endhint %}
 
 **Update 1**\
-****Some replies to my tweet to this post suggested that PatchGuard would normally kick-in and BSOD the OS, which I am sure is the case, although in my lab I experienced no BSODs even though the kernel stayed patched with an unlinked process for 12+ hours.
+\*\*\*\*Some replies to my tweet to this post suggested that PatchGuard would normally kick-in and BSOD the OS, which I am sure is the case, although in my lab I experienced no BSODs even though the kernel stayed patched with an unlinked process for 12+ hours.
 
 **Update 2**\
-****I realized that my Windows VM is running in test mode with no integrity checks, possibly explaining the lack os BSODs - unconfirmed.\
+\*\*\*\*I realized that my Windows VM is running in test mode with no integrity checks, possibly explaining the lack os BSODs - unconfirmed.\
 \
 **Update 3**\
-****Thanks **** [**@**FuzzySec](https://twitter.com/FuzzySec) for clarifying the BSOD/PatchGuard matter!
+\*\*\*\*Thanks \*\*\*\* [\*\*@\*\*FuzzySec](https://twitter.com/FuzzySec) for clarifying the BSOD/PatchGuard matter!
 
 ![](<../../.gitbook/assets/image (397).png>)
 
@@ -43,7 +43,7 @@ Simplified (head and tail omitted) graphical representation of the doubly-linked
 
 ![](<../../.gitbook/assets/image (382).png>)
 
-`LIST_ENTRY` is the doubly-linked list equivalent data structure in Windows kernel and is defined as:&#x20;
+`LIST_ENTRY` is the doubly-linked list equivalent data structure in Windows kernel and is defined as:
 
 ```erlang
 kd> dt _list_entry
@@ -118,14 +118,14 @@ Let's now figure out the previous and next EPROCESS nodes our notepad.exe is poi
 
 Below shows in two different ways (1. observing `ActiveProcessLinks` from the EPROCESS structure; 2. reading two 64-bit values from the `EPROCESS+0x2f0`) that our notepad's:
 
-* FLINK (green) is pointing to ``ffffb208`f8d1e7b0``&#x20;
+* FLINK (green) is pointing to ``ffffb208`f8d1e7b0``
 * BLINK (blue) is pointing to ``ffffb208`f8b89370``
 
 ![](<../../.gitbook/assets/image (365).png>)
 
-For curiosity, we can check the process's image name referenced by the notepad's FLINK at ``ffffb208`f8d1e7b0`` - the next EPROCESS node to our notepad's EPROCESS:&#x20;
+For curiosity, we can check the process's image name referenced by the notepad's FLINK at ``ffffb208`f8d1e7b0`` - the next EPROCESS node to our notepad's EPROCESS:
 
-We need to:&#x20;
+We need to:
 
 * find the EPROCESS location by subtracting 0x2f0 from the FLINK ``ffffb208`f8d1e7b0``. This is because FLINK points to `EPROCESS.ActiveProcessLinks` and `ActiveProcessLinks` is located at offset 0x2f0 from the beginning of the EPROCESS location
 * add 0x450 since this is the offset of the `ImageFileName` in the EPROCESS structure
@@ -142,7 +142,7 @@ Let's do the same for the process referenced by the notepad's BLINK to get the p
 kd> da ffffb208`f8b89370-2f0+450
 ```
 
-![](<../../.gitbook/assets/image (368).png>)
+![](<../../.gitbook/assets/image (367).png>)
 
 Looks like our notepad EPROCESS is surrounded by two svchost EPROCESS nodes.
 
@@ -170,7 +170,7 @@ PROCESS ffffb208f8b89080
     Image: svchost.exe
 ```
 
-Below shows essentially the same as the above output with some colour-coding:&#x20;
+Below shows essentially the same as the above output with some colour-coding:
 
 ![](<../../.gitbook/assets/image (369).png>)
 

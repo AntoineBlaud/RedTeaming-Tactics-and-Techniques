@@ -8,15 +8,15 @@ description: >-
 
 ## Overview
 
-In this short lab I am going to use a WinDBG to make my malicious program pretend to look like a notepad.exe (hence masquerading) when inspecting system's running processes with tools like Sysinternals ProcExplorer and similar. Note that this is not a [code injection](../code-injection-process-injection/) exercise.&#x20;
+In this short lab I am going to use a WinDBG to make my malicious program pretend to look like a notepad.exe (hence masquerading) when inspecting system's running processes with tools like Sysinternals ProcExplorer and similar. Note that this is not a [code injection](../code-injection-process-injection/) exercise.
 
 This is possible, because information about the process, i.e commandline arguments, image location, loaded modules, etc is stored in a memory structure called Process Environment Block (`_PEB`) that is accessible and writeable from the userland.
 
 {% hint style="info" %}
-Thanks to [@FuzzySec](https://twitter.com/FuzzySec) **** who pointed out the following:\
+Thanks to [@FuzzySec](https://twitter.com/FuzzySec) \*\*\*\* who pointed out the following:\
 _you don't need SeDebugPrivilege when overwriting the PEB for your own process or generally for overwriting a process spawned in your user context_
 
-__[_https://twitter.com/FuzzySec/status/1090963518558482436_](https://twitter.com/FuzzySec/status/1090963518558482436)__
+[_**https://twitter.com/FuzzySec/status/1090963518558482436**_](https://twitter.com/FuzzySec/status/1090963518558482436)
 {% endhint %}
 
 This lab builds on the previous lab:
@@ -27,7 +27,7 @@ This lab builds on the previous lab:
 
 ## Context
 
-For this demo, my malicious binary is going to be an `nc.exe` -  a rudimentary netcat reverse shell spawned by cmd.exe and the PID of `4620`:
+For this demo, my malicious binary is going to be an `nc.exe` - a rudimentary netcat reverse shell spawned by cmd.exe and the PID of `4620`:
 
 ![](../../.gitbook/assets/malicious-process.PNG)
 
@@ -47,7 +47,7 @@ dt _peb @$peb
 
 ![](../../.gitbook/assets/masquerade-13.png)
 
-Note that at the offset `0x020` of the PEB, there is another structure which is of interest to us -  `_RTL_USER_PROCESS_PARAMETERS`, which contains nc.exe process information. Let's inspect it further:
+Note that at the offset `0x020` of the PEB, there is another structure which is of interest to us - `_RTL_USER_PROCESS_PARAMETERS`, which contains nc.exe process information. Let's inspect it further:
 
 ```csharp
 dt _RTL_USER_PROCESS_PARAMETERS 0x00000000`005e1f60
@@ -170,19 +170,19 @@ pebmasquerade.exe
 
 ..and here is the compiled running program being inspected with ProcExplorer - we can see that the masquerading is achieved successfully:
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-23 23-36-52.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-23-23-36-52.png)
 
 ## Observations
 
-Switching back to the nc.exe masquerading as notepad.exe, if we check the `!peb` data, we can see a notepad.exe is now displayed in the  `Ldr.InMemoryOrderModuleList` memory structure!
+Switching back to the nc.exe masquerading as notepad.exe, if we check the `!peb` data, we can see a notepad.exe is now displayed in the `Ldr.InMemoryOrderModuleList` memory structure!
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-23 19-47-59.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-23-19-47-59.png)
 
 {% embed url="https://docs.microsoft.com/en-us/windows/desktop/api/winternl/nf-winternl-ntqueryinformationprocess#return-value" %}
 
 Note that even though it shows in the loaded modules that notepad.exe was loaded, it still does not mean that there was an actual notepad.exe process created and sysmon logs prove this, meaning commandline logging can still be helpful in detecting this behaviour.
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-23 20-02-49.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-23-20-02-49.png)
 
 ## Credits
 

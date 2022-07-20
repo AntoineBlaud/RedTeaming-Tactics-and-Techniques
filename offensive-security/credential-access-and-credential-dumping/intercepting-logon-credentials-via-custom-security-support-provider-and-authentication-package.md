@@ -8,7 +8,7 @@ This technique abuses Windows Security Support Provider (SSP) and Authentication
 
 ## Loading SSP with Reboot
 
-In this lab, mimikatz Security Support Provider [mimilib.dll](https://github.com/gentilkiwi/mimikatz) will be registered as a Windows Security Package.&#x20;
+In this lab, mimikatz Security Support Provider [mimilib.dll](https://github.com/gentilkiwi/mimikatz) will be registered as a Windows Security Package.
 
 Once the Security Package is registered and the system is rebooted, the mimilib.dll will be loaded into lsass.exe process memory and intercept all logon passwords next time someone logs onto the system or otherwise authenticates, say, via `runas.exe`.
 
@@ -44,7 +44,7 @@ The below shows `Security Packages` registry value with the `mimilib` added and 
 ![](../../.gitbook/assets/lsa-security-packages.png)
 
 {% hint style="info" %}
-Reboot is required for the new SSP to take effect after it's been added to the Security Packages  list.
+Reboot is required for the new SSP to take effect after it's been added to the Security Packages list.
 {% endhint %}
 
 ## Loading SSP without Reboot
@@ -82,7 +82,7 @@ Loading the SSP with this approach does not survive a reboot unlike SSPs that ar
 
 ## Detection
 
-It may be worth monitoring `Security Packages` value in`hklm\system\currentcontrolset\control\lsa\` for changes.&#x20;
+It may be worth monitoring `Security Packages` value in`hklm\system\currentcontrolset\control\lsa\` for changes.
 
 Newly added packages should be inspected:
 
@@ -90,7 +90,7 @@ Newly added packages should be inspected:
 
 Additionally, mimilib.dll (same applies to custom spotless.dll) can be observed in the list of DLLs loaded by lsass.exe, so as a defender, you may want to make a baseline of loaded known good DLLs of the lsass process and monitor it for any new suspicious DLLs:
 
-![](<../../.gitbook/assets/lsa-loaded-dll (2).png>)
+![](<../../.gitbook/assets/Screenshot from 2018-07-24 23-08-39.png>)
 
 ## Code
 

@@ -10,7 +10,7 @@ This lab builds on the explorations in [T1208: Kerberoasting](t1208-kerberoastin
 
 ## Execution
 
-I will be using mimikatz to create a Kerberos Silver Ticket - forging/rewriting the cracked ticket with some new details that benefit me as an attacker.&#x20;
+I will be using mimikatz to create a Kerberos Silver Ticket - forging/rewriting the cracked ticket with some new details that benefit me as an attacker.
 
 Below is a table with values supplied to mimikatz explained and the command itself:
 
@@ -66,7 +66,7 @@ Invoke-WebRequest -UseBasicParsing -UseDefaultCredentials http://dc-mantvydas.of
 
 Note a network logon from `benignadmin` as well as forged RIDs:
 
-![](<../../.gitbook/assets/silver-tickets-4624 (2).png>)
+![](<../../.gitbook/assets/silver-tickets-4624 (1).png>)
 
 It is better not to use user accounts for running services on them, but if you do, make sure to use really strong passwords! Computer accounts generate long and complex passwords and they change frequently, so they are better suited for running services on. Better yet, follow good practices such as using [Group Managed Service Accounts](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/hh831782\(v=ws.11\)) for running more secure services.
 

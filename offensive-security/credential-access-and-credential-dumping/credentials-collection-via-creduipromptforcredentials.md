@@ -58,7 +58,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 {% endcode %}
 
 {% hint style="warning" %}
-Although in this lab I am using `CredUIPromptForCredentials `for invoking credentials prompt, you should be using  [`CredUIPromptForWindowsCredentials`](https://docs.microsoft.com/windows/desktop/api/wincred/nf-wincred-creduipromptforwindowscredentialsa)
+Although in this lab I am using `CredUIPromptForCredentials` for invoking credentials prompt, you should be using [`CredUIPromptForWindowsCredentials`](https://docs.microsoft.com/windows/desktop/api/wincred/nf-wincred-creduipromptforwindowscredentialsa)
 {% endhint %}
 
 If we compile and run the above code, we get a credential prompt, that captures user's credentials in plain text, which we could then save to a file or send out over the internet:
@@ -66,7 +66,7 @@ If we compile and run the above code, we get a credential prompt, that captures 
 ![](<../../.gitbook/assets/image (547).png>)
 
 {% hint style="info" %}
-The above credential prompt can also be invoked with  PowerShell cmdlet `Get-Credential`.
+The above credential prompt can also be invoked with PowerShell cmdlet `Get-Credential`.
 {% endhint %}
 
 ## Detecting Credential Prompts
@@ -127,7 +127,7 @@ namespace SimpleConsumer
 
 Below shows RogueCredentialsPrompt.exe and Powershell.exe invoking Windows credential prompts and our simple consumer program detecting that activity:
 
-![](<../../.gitbook/assets/CredUIPromptForCredentials -detection.gif>)
+![](../../.gitbook/assets/creduipromptforcredentials-detection.gif)
 
 ## References
 

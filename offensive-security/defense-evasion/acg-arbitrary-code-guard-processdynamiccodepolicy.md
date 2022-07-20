@@ -162,7 +162,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return TRUE;
 }
 
-
 ```
 {% endtab %}
 
@@ -219,7 +218,6 @@ int main(int argc, char *argv[]) {
 	remoteThread = CreateRemoteThread(processHandle, NULL, 0, (LPTHREAD_START_ROUTINE)remoteBuffer, NULL, 0, NULL);
 	CloseHandle(processHandle);
 }
-
 ```
 {% endtab %}
 {% endtabs %}

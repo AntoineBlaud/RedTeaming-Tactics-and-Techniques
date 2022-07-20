@@ -34,7 +34,7 @@ This lab assumes that the attacker has already gained a meterpreter shell from t
 
 Metasploit's post-exploitation module `windows/manage/reflective_dll_inject` configured:
 
-![](<../../.gitbook/assets/reflective-dll-options (1).png>)
+![](../../.gitbook/assets/reflective-dll-options.png)
 
 {% hint style="info" %}
 `Reflective_dll.x64.dll` is the DLL compiled from Steven Fewer's [reflective dll injection](https://github.com/stephenfewer/ReflectiveDLLInjection) project on github.
@@ -99,7 +99,7 @@ Indeed, if we look at the `031e0000`, we can see the executable header (MZ) and 
 
 ## Detecting Reflective DLL Injection with Volatility
 
-`Malfind` is the Volatility's pluging responsible for finding various types of code injection and reflective DLL injection can usually be detected with the help of this plugin.&#x20;
+`Malfind` is the Volatility's pluging responsible for finding various types of code injection and reflective DLL injection can usually be detected with the help of this plugin.
 
 The plugin, at a high level will scan through various memory regions described by Virtual Address Descriptors (VADs) and look for any regions with `PAGE_EXECUTE_READWRITE` memory protection and then check for the magic bytes `4d5a` (MZ in ASCII) at the very beginning of those regions as those bytes signify the start of a Windows executable (i.e exe, dll):
 

@@ -1,6 +1,6 @@
 # Finding Kernel32 Base and Function Addresses in Shellcode
 
-The purpose of this lab is to understand how shellcode finds kernel32 base address in memory of the process it's running in and then uses to find addresses of other functions that it requires in order to achieve its goal.&#x20;
+The purpose of this lab is to understand how shellcode finds kernel32 base address in memory of the process it's running in and then uses to find addresses of other functions that it requires in order to achieve its goal.
 
 In this lab I will write some assembly to find the kernel32 dll's base address, resolve `WinExec` function address in memory and call it to open `calc.exe`.
 
@@ -50,7 +50,7 @@ dt _PEB_LDR_DATA
 
 ![](<../../.gitbook/assets/image (34).png>)
 
-`InMemoryOrderModuleList` points to another structure we're interested in - `LDR_DATA_TABLE_ENTRY` even though WinDBG suggests the structure type is `LIST_ENTRY`. As confusing as it may seem at first, this is actually right, since `InMemoryOrderModuleList` is a doubly linked list where each list item points to an `LDR_DATA_TABLE_ENTRY` structure.&#x20;
+`InMemoryOrderModuleList` points to another structure we're interested in - `LDR_DATA_TABLE_ENTRY` even though WinDBG suggests the structure type is `LIST_ENTRY`. As confusing as it may seem at first, this is actually right, since `InMemoryOrderModuleList` is a doubly linked list where each list item points to an `LDR_DATA_TABLE_ENTRY` structure.
 
 Remember, since the shellcode is looking for the kernel32.dll base address, the `LDR_DATA_TABLE_ENTRY` is the last structure in the chain of structures it needs to locate. Once the structure is located, the member `DllBase` at offset 0x18 stores the base address of the module:
 
@@ -78,7 +78,7 @@ dt _peb @$peb
 
 ![Ldr points to 0x77de0c40](<../../.gitbook/assets/image (36).png>)
 
-From the above, we can see that the `PEB.Ldr` (`Ldr` member is at offset 0x00c) points to an `PEB_LDR_DATA` structure at 0x77de0c40.&#x20;
+From the above, we can see that the `PEB.Ldr` (`Ldr` member is at offset 0x00c) points to an `PEB_LDR_DATA` structure at 0x77de0c40.
 
 We can view the `PEB_LDR_DATA` structure at 0x77de0c40 by overlaying it with address pointed to by the PEB.Ldr (0xc) structure like so:
 
@@ -210,7 +210,7 @@ assume fs:nothing
 	end main
 ```
 
-Below shows a compiled and executed assembly with a highlighted eax register that points to a  memory address 76670000, which indicates that we got the base address of the kernel32 using assembly successfully:
+Below shows a compiled and executed assembly with a highlighted eax register that points to a memory address 76670000, which indicates that we got the base address of the kernel32 using assembly successfully:
 
 ![](<../../.gitbook/assets/image (51).png>)
 
@@ -218,7 +218,7 @@ Below shows a compiled and executed assembly with a highlighted eax register tha
 
 Once we have the kernel32 base address, we can then loop through all the exported functions of the module to find the function we're interested in (`WinExec`) - or in other words - the function we want to call from the shellcode. This process requires a number of steps to be performed which are well known, so let's try and follow them alongside with some visuals and a bit of PE parsing action.
 
-See my previous lab about parsing PE files and some terminology on what is Virtual Address (VA) and Relative Virtual Address (RVA) which is used extensively in this exercise: &#x20;
+See my previous lab about parsing PE files and some terminology on what is Virtual Address (VA) and Relative Virtual Address (RVA) which is used extensively in this exercise:
 
 {% content-ref url="../../miscellaneous-reversing-forensics/windows-kernel-internals/pe-file-header-parser-in-c++.md" %}
 [pe-file-header-parser-in-c++.md](../../miscellaneous-reversing-forensics/windows-kernel-internals/pe-file-header-parser-in-c++.md)
@@ -279,7 +279,7 @@ Indeed at 972e8 we see an RVA for the first exported function:
 
 ### 0x20 into the Export Table - Name Pointer Table
 
-0x972c0 + 0x20 = 0x972e0 RVA contains a pointer to an RVA to exported functions Name Pointer Table - 0x98bf4 in my case:&#x20;
+0x972c0 + 0x20 = 0x972e0 RVA contains a pointer to an RVA to exported functions Name Pointer Table - 0x98bf4 in my case:
 
 ![](<../../.gitbook/assets/image (58).png>)
 
@@ -301,7 +301,7 @@ Again, confirming that ordinals are present at RVA 9a500:
 
 Knowing all of the above, let's try to find a `WinExec` function address manually, so we know how to implement it in assembly.
 
-Firs of, we would need to loop through the Name Pointer table, read the exported function's name and check if it is == `WinExec` and remembering how many iterations it took for us to find the function.&#x20;
+Firs of, we would need to loop through the Name Pointer table, read the exported function's name and check if it is == `WinExec` and remembering how many iterations it took for us to find the function.
 
 It would have taken 0x5ff iterations for me to find the WinExec (0x602 - 0x3 = 0x5ff):
 
@@ -372,7 +372,7 @@ As per the visuals earlier that showed that 0x3c into the file is a PE signature
 
 ![](<../../.gitbook/assets/image (53).png>)
 
-Lines 1-13 are the same as seen earlier -  they find the kernel32 dll base address. In line 15 we move kernel32 base address to ebx holding our kernel32 base address. Then we shift that address by 3c bytes, read its contents and move it to eax. After this operation, the eax should hold the value F8, which we see it does:
+Lines 1-13 are the same as seen earlier - they find the kernel32 dll base address. In line 15 we move kernel32 base address to ebx holding our kernel32 base address. Then we shift that address by 3c bytes, read its contents and move it to eax. After this operation, the eax should hold the value F8, which we see it does:
 
 ![](<../../.gitbook/assets/image (71).png>)
 
@@ -390,7 +390,7 @@ To find the address of the Export Table, we add kernel32 base address 75690000 a
 
 ![](<../../.gitbook/assets/image (74).png>)
 
-### &#x20;0x14 into the Export Table - Number of Exported Functions
+### 0x14 into the Export Table - Number of Exported Functions
 
 To check if our calculations in assembly are correct at this point, we can add the Export Table address and 0x14 (offset into the Export Table showing how many functions kernel32 module exports) and if we cross-reference the value found there with the results we got via the visual PE parsing approach, we should have 0x643 exported functions:
 
@@ -424,7 +424,7 @@ Let's get its address now by adding the Name Pointer Table RVA 00098BF4 and kern
 
 If we follow that address 75690000 + 0x9b1f2, we find the first function name:
 
-![](<../../.gitbook/assets/image (106).png>)
+![](<../../.gitbook/assets/image (105).png>)
 
 ### 0x24 into the Export Table - Functions' Ordinal Table
 
@@ -448,11 +448,11 @@ We need to store it as a sequence of reversed bytes (indiannes). `WinExec` in he
 
 Let's now push the remaining bytes. Remember that we need a null byte at the end to terminate the string. Also, remember that data needs to be pushed onto the stack in reverse order:
 
-![](<../../.gitbook/assets/winexec (1).gif>)
+![](../../.gitbook/assets/winexec.gif)
 
 #### Finding WinExec Location in Name Pointer Table
 
-After looping through the exported function Names Table and comparing each function name in there with `WinExec`, once `WinExec` is found, the loop breaks and the eax contains the number of iterations it took to find the `WinExec`. In this case it's 0x5ff - exactly the same number as previously seen when [doing this exercise manually](finding-kernel32-base-and-function-addresses-in-shellcode.md#finding-winexec-position-in-the-name-pointer-table):&#x20;
+After looping through the exported function Names Table and comparing each function name in there with `WinExec`, once `WinExec` is found, the loop breaks and the eax contains the number of iterations it took to find the `WinExec`. In this case it's 0x5ff - exactly the same number as previously seen when [doing this exercise manually](finding-kernel32-base-and-function-addresses-in-shellcode.md#finding-winexec-position-in-the-name-pointer-table):
 
 ![](<../../.gitbook/assets/image (95).png>)
 
@@ -470,7 +470,7 @@ Get the `WinExec` RVA from the Export Address Table by multiplying location of t
 
 ### Finding WinExec Virtual Address
 
-We can now resolve the `WinExec` function address' location in the kernel32 dll module by adding the `WinExec` RVA 5d220 and kernel32 base address 75690000, which equals to 756ED220:&#x20;
+We can now resolve the `WinExec` function address' location in the kernel32 dll module by adding the `WinExec` RVA 5d220 and kernel32 base address 75690000, which equals to 756ED220:
 
 ![](<../../.gitbook/assets/image (98).png>)
 

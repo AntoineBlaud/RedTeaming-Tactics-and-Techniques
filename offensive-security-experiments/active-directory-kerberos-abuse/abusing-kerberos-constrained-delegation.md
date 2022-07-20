@@ -14,12 +14,12 @@ Get-NetUser -TrustedToAuth
 ```
 {% endcode %}
 
-In the below screenshot, the user `spot` is allowed to delegate or in other words, impersonate any user and authenticate to a file system service (CIFS) on a domain controller DC01.&#x20;
+In the below screenshot, the user `spot` is allowed to delegate or in other words, impersonate any user and authenticate to a file system service (CIFS) on a domain controller DC01.
 
 {% hint style="info" %}
 User has to have an attribute `TRUSTED_TO_AUTH_FOR_DELEGATION` in order for it to be able to authenticate to the remote service.
 
-> TRUSTED\_TO\_AUTH\_FOR\_DELEGATION - (Windows 2000/Windows Server 2003) The account is enabled for delegation. This is a security-sensitive setting. Accounts that have this option enabled should be tightly controlled. This setting lets a service that runs under the account assume a client's identity and authenticate as that user to other remote servers on the network.&#x20;
+> TRUSTED\_TO\_AUTH\_FOR\_DELEGATION - (Windows 2000/Windows Server 2003) The account is enabled for delegation. This is a security-sensitive setting. Accounts that have this option enabled should be tightly controlled. This setting lets a service that runs under the account assume a client's identity and authenticate as that user to other remote servers on the network.
 >
 > [https://support.microsoft.com/en-gb/help/305144/how-to-use-useraccountcontrol-to-manipulate-user-account-properties](https://support.microsoft.com/en-gb/help/305144/how-to-use-useraccountcontrol-to-manipulate-user-account-properties)
 {% endhint %}
@@ -46,7 +46,7 @@ dir \\dc01\c$
 ```
 {% endcode %}
 
-![](<../../.gitbook/assets/image (134).png>)
+![](<../../.gitbook/assets/image (133).png>)
 
 Let's now request a delegation TGT for the user spot:
 
@@ -97,7 +97,7 @@ Note that in this case we requested a TGS for the CIFS service, but we could als
 
 ## Computer Account
 
-If you have compromised a machine account or in other words you have a SYSTEM level privileges on a machine that is configured with constrained delegation, you can assume any identity in the AD domain and authenticate to services that the compromised machine is trusted to delegate to.&#x20;
+If you have compromised a machine account or in other words you have a SYSTEM level privileges on a machine that is configured with constrained delegation, you can assume any identity in the AD domain and authenticate to services that the compromised machine is trusted to delegate to.
 
 In this lab, a workstation WS02 is trusted to delegate to DC01 for CIFS and LDAP services and I am going to exploit the CIFS services this time:
 
@@ -112,7 +112,7 @@ Get-NetComputer ws02 | Select-Object -ExpandProperty msds-allowedtodelegateto | 
 ```
 {% endcode %}
 
-![](<../../.gitbook/assets/image (153).png>)
+![](<../../.gitbook/assets/image (152).png>)
 
 Let's check that we're currently running as SYSTEM and can't access the C$ on our domain controller DC01:
 

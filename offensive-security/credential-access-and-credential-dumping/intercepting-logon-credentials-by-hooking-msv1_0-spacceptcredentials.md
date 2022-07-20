@@ -31,7 +31,7 @@ Below is a high level overview of the lab and technique implementation:
 * `SpAcceptCredentials` is passed clear text credentials
 * If we can hook the `SpAcceptCredentials`, we can intercept those credentials
 * `SpAcceptCredentials` is not an exported function in the MSV1\_0.dll, so we cannot use `GetProcAddress` to find its location in lsass process memory
-* In order to find `SpAcceptCredentials` in memory, we will need to:&#x20;
+* In order to find `SpAcceptCredentials` in memory, we will need to:
   * signature it
   * scan lsass.exe memory space (actually, for simplicity, just the range of `msv1_0.baseOfImage - msv1_0.sizeOfImage`) for that signature
 * Once `SpAcceptCredentials` signature is found, we will hook it by redirecting the original `SpAcceptCredentials` to our rogue function `hookedSpAccecptedCredentials`
@@ -109,7 +109,7 @@ Considering that we know the following:
   * Domain name
   * DownLevelName - user name
 
-...we can now inspect the values and structures passed as shown below:&#x20;
+...we can now inspect the values and structures passed as shown below:
 
 ![PSECPKG\_PRIMARY\_CRED structure and SpAcceptCredentials prototype](<../../.gitbook/assets/image (449).png>)
 
@@ -145,7 +145,7 @@ Additionally, below shows that the value contained in the register `r8` holds a 
 
 ![](<../../.gitbook/assets/image (438).png>)
 
-## Signaturing `SpAcceptCredentials`&#x20;
+## Signaturing `SpAcceptCredentials`
 
 As mentioned earlier, the `SpAcceptCredentials`is not exported in the `msv1_0` DLL, so we cannot use Windows APIs to resolve its address in memory, therefore we need to find it ourselves by scanning the lsass process memory space.
 
@@ -169,7 +169,7 @@ We can also confirm the bytes are present when `SpAcceptCredentials` breakpoint 
 
 We will pass this signature later to our memory hunting routine `GetPatternMemoryAddress(..., signature, ...)` in our DLL, that will be injected into the lsass where it will identify the memory address of `SpAcceptCredentials` routine inside the lsass.exe process:
 
-![The signature will be passed on to the routine GetPatternMemoryAddress ](<../../.gitbook/assets/image (463).png>)
+![The signature will be passed on to the routine GetPatternMemoryAddress](<../../.gitbook/assets/image (463).png>)
 
 ## HUH - Hooking: Under the Hood
 
@@ -192,7 +192,7 @@ Assuming we've compiled the DLL, let's inject it into lsass. I will simply injec
 
 ![](../../.gitbook/assets/msv1\_0-spacceptcredentials-hooking.gif)
 
-Let's now have a quick look inside the lsass.exe via WinDBG when `msv1_0!SpAcceptCredentials` is called.&#x20;
+Let's now have a quick look inside the lsass.exe via WinDBG when `msv1_0!SpAcceptCredentials` is called.
 
 If we break into lsass, we will see that our module `memssp-dll.dll` is now loaded - line 23:
 
@@ -237,7 +237,7 @@ The first instructions of the hooked function now are:
 
 ![](<../../.gitbook/assets/image (468).png>)
 
-These instructions came from the below code in our DLL.&#x20;
+These instructions came from the below code in our DLL.
 
 `mov rax` instruction, where rax is the address of our `hookedSpAccecptedCredentials`:
 
@@ -275,9 +275,9 @@ Below shows how user `spotless` on a machine `WS02` authenticates successfully a
 
 ![](../../.gitbook/assets/msv1\_0-spacceptcredentials.gif)
 
-Note that msv1\_0 exports a function `LsaApLogonUserEx2` that we could have hooked to intercept credentials since it is also passed a structure `PSECPKG_PRIMARY_CRED` when a user  attempts to authenticate. This lab, however, was focused on the exercise of finding the required function address by scanning the target process memory rather than resolving it via Windows APIs:
+Note that msv1\_0 exports a function `LsaApLogonUserEx2` that we could have hooked to intercept credentials since it is also passed a structure `PSECPKG_PRIMARY_CRED` when a user attempts to authenticate. This lab, however, was focused on the exercise of finding the required function address by scanning the target process memory rather than resolving it via Windows APIs:
 
-![](../../.gitbook/assets/LsaApLogonUserEx2.gif)
+![](../../.gitbook/assets/lsaaplogonuserex2.gif)
 
 ## SymFromName
 

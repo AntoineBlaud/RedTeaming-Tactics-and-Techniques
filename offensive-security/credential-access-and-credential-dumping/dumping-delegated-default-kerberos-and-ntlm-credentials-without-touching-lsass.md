@@ -12,13 +12,13 @@ To illustrate - the below shows how a user spotless@offense attempts to access t
 Default Password is a currently logged on user's password.
 {% endhint %}
 
-![](<../../.gitbook/assets/Annotation 2019-08-20 224950.png>)
+![](../../.gitbook/assets/annotation-2019-08-20-224950.png)
 
-If the Credentials Delegation was enabled as shown below:&#x20;
+If the Credentials Delegation was enabled as shown below:
 
-![](<../../.gitbook/assets/Annotation 2019-08-20 225941.png>)
+![](../../.gitbook/assets/annotation-2019-08-20-225941.png)
 
-...the machines that are running a termsrv (RDP) service would now be allowed to authenticate users who are delegating their credentials.&#x20;
+...the machines that are running a termsrv (RDP) service would now be allowed to authenticate users who are delegating their credentials.
 
 Below shows how the same user spotless is attempting to connect to RDP on ws02 and gets authenticated immediately without being prompted for the password - this means that the user's credenentials were delegated and the termsrv/ws2.offense.local accepted them due to the GPO change we described earlier whereby Credential Delegation was enabled:
 

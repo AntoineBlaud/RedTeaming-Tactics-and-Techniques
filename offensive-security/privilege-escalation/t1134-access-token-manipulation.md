@@ -67,7 +67,7 @@ Launching `Tokens.exe` from the powershell console spawns a reverse shell that t
 
 ![](../../.gitbook/assets/token-shell-impersonated.png)
 
-The logon for OFFESNE\administrator in the above test was of logon type 2 (interactive logon, meaning I launched a new process on the victim system using a `runas /user:administrator@offense cmd` command).&#x20;
+The logon for OFFESNE\administrator in the above test was of logon type 2 (interactive logon, meaning I launched a new process on the victim system using a `runas /user:administrator@offense cmd` command).
 
 Another quick test that I wanted to do was a theft of an access token that was present in the system due to a network logon (i.e psexec, winexec, pth-winexe, etc), so I spawned a cmd shell remotely from the attacking machine to the victim machine using:
 
@@ -101,7 +101,7 @@ Running the compiled code invokes a new process with the newly stolen token:
 
 note the cmd.exe has a PID 5188 - if we rerun the `Invoke-TokenManipulation`, we can see the new process is using the access token with logon type 3:
 
-![](<../../.gitbook/assets/token-new-logon-3 (1).png>)
+![](../../.gitbook/assets/token-new-logon-3.png)
 
 ## Observations
 
@@ -109,7 +109,7 @@ Imagine you were investigating the host we stole the tokens from, because it exh
 
 ![](<../../.gitbook/assets/token-disasm (1).png>)
 
-As suggested by the above, you should think about API monitoring if you want to detect these token manipulations on endpoints, but beware - this can be quite noisy.&#x20;
+As suggested by the above, you should think about API monitoring if you want to detect these token manipulations on endpoints, but beware - this can be quite noisy.
 
 Windows event logs of IDs `4672` and `4674` may be helpful for you as a defender also - below shows a network logon of a `pth-winexe //10.0.0.2 -U offense/administrator%pass cmd` and then later, a netcat reverse shell originating from the same logon session:
 

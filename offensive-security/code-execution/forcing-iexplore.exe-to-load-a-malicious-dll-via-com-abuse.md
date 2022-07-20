@@ -40,12 +40,12 @@ New-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{$CLSID}\ShellFolder" -Name
 
 Once run, we can see that the new COM object got created successfully in the registry:
 
-![](<../../.gitbook/assets/Annotation 2019-06-15 165723.png>)
+![](../../.gitbook/assets/annotation-2019-06-15-165723.png)
 
 We are now ready to execute the payload with the below powershell. What happens here is:
 
 * We're requesting a new instance of the `ShellWindows` `(9BA05972-F6A8-11CF-A442-00A0C90A8F39)` COM object, which actually applies to both explorer.exe and iexplore.exe, meaning with a handle to that object, we can interface with them using their exposed methods
-* Specifically, we are interested in getting an instance of a COM object for iexplore.exe, because its COM server has a method `Navigate2(...)` exposed. The `Navigate2` allows us to programatically instruct the iexplore.exe to navigate to a URL.&#x20;
+* Specifically, we are interested in getting an instance of a COM object for iexplore.exe, because its COM server has a method `Navigate2(...)` exposed. The `Navigate2` allows us to programatically instruct the iexplore.exe to navigate to a URL.
 * We are asking iexplore to navigate to our newly created malicious CLSID pointing to our DLL instead of a URL:
 
 {% code title="attacker@victim" %}
@@ -67,7 +67,7 @@ Code execution in action, resulting in a meterpreter session:
 As a fun bonus, it's possible to call our malicious COM object via explorer by navigating to\
 `shell:::{55555555-5555-5555-5555-555555555555}` which forces the explorer.exe to load our malicious DLL:
 
-![](<../../.gitbook/assets/Annotation 2019-06-15 174905.png>)
+![](../../.gitbook/assets/annotation-2019-06-15-174905.png)
 
 ...and results in a meterpreter shell:
 
@@ -80,4 +80,3 @@ As a fun bonus, it's possible to call our malicious COM object via explorer by n
 {% embed url="https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752094(v%3Dvs.85)" %}
 
 {% embed url="https://labs.nettitude.com/blog/com-and-the-powerthief/" %}
-

