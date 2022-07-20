@@ -18,7 +18,8 @@ It is surprising easy to install bloodhound these days from Kali Linux:
 
 {% code title="attacker@kali" %}
 ```csharp
-apt-get install bloodhound
+install version 4.0.1 from https://github.com/BloodHoundAD/BloodHound
+curl "https://raw.githubusercontent.com/CompassSecurity/BloodHoundQueries/master/customqueries.json" > ~/.config/bloodhound/customqueries.json
 ```
 {% endcode %}
 
@@ -30,7 +31,7 @@ Once the installation is complete, we need to configure neo4j - mainly just chan
 
 {% code title="attacker@kali" %}
 ```csharp
-neo4j console
+/usr/bin/neo4j console
 ```
 {% endcode %}
 
@@ -81,7 +82,8 @@ We can now proceed to AD enumeration:
 
 {% code title="attacker@victim" %}
 ```csharp
-. .\SharpHound.ps1
+download https://github.com/BloodHoundAD/SharpHound/releases/tag/v1.0.3
+import-module .\SharpHound.ps1
 Invoke-BloodHound -CollectionMethod All -JSONFolder "c:\experiments\bloodhound"
 ```
 {% endcode %}
