@@ -31,7 +31,7 @@ Once the installation is complete, we need to configure neo4j - mainly just chan
 
 {% code title="attacker@kali" %}
 ```csharp
-/usr/bin/neo4j console
+update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java && /usr/bin/neo4j console
 ```
 {% endcode %}
 
