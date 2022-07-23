@@ -78,6 +78,7 @@
   * [pubprn.vbs Signed Script Code Execution](offensive-security/code-execution/t1216-signed-script-ce.md)
 * [Code & Process Injection](offensive-security/code-injection-process-injection/README.md)
   * [Propagate Injection](offensive-security/code-injection-process-injection/propagate-injection.md)
+  * [Atom Bombing](offensive-security/code-injection-process-injection/atom-bombing.md)
   * [CreateRemoteThread Shellcode Injection](offensive-security/code-injection-process-injection/process-injection.md)
   * [DLL Injection](offensive-security/code-injection-process-injection/dll-injection.md)
   * [Reflective DLL Injection](offensive-security/code-injection-process-injection/reflective-dll-injection.md)
