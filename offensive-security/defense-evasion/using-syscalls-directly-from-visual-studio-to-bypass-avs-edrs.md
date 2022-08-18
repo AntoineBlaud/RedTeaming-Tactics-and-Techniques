@@ -12,7 +12,7 @@ Also, see my previous labs about API hooking/unhooking: [Windows API Hooking](..
 
 Add a new file to the project, say `syscalls.asm` - make sure the main cpp file has a different name as the project will not compile:
 
-![](<../../.gitbook/assets/image (3).png>)
+![](<../../.gitbook/assets/image (3) (1).png>)
 
 Navigate to project's `Build Customizations`:
 

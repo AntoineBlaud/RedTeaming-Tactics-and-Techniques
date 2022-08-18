@@ -10,9 +10,13 @@ Below are some of the conditions making an AD environment vulnerable to ADCS + N
 
 * ADCS is configured to allow NTLM authentication;
 * NTLM authentication is not protected by EPA or SMB signing;
-* ADCS is running either of these services:
-  * Certificate Authority Web Enrollment
-  * Certificate Enrollment Web Service
+*   ADCS is running either of these services:
+
+    * Certificate Authority Web Enrollment
+    * Certificate Enrollment Web Service
+    * run certutil.exe and check the presence of a CA server&#x20;
+
+
 
 ## Overview
 
@@ -116,6 +120,10 @@ Above shows how:
 * 10.0.0.5 relayed the `DC01$` authentication to `CA01`;
 * `CA01` issued a certificate for the `DC01$` computer account.
 
+### With mimikatz
+
+![](<../../.gitbook/assets/image (3).png>)
+
 ### Requesting DC01$ TGT
 
 On `WS01`, we can now use `rubeus` to request a Kerberos TGT for the `DC01$` computer account like so:
@@ -150,13 +158,13 @@ Having the NTLM hash for `krbtgt` allows us to create [Kerberos Golden Tickets](
 
 ## Remember
 
-It's worth remembering that in some AD environments there will be highly privileged accounts connecting to workstations to perform some administrative tasks and if you have local administrator rights on a compromised Windows box, you can perform ADCS + NTLM relay attack to request a certificate for that service account.&#x20;
+It's worth remembering that in some AD environments there will be highly privileged accounts connecting to workstations to perform some administrative tasks and if you have local administrator rights on a compromised Windows box, you can perform ADCS + NTLM relay attack to request a certificate for that service account.
 
 To do so, you'd need the following:
 
 {% hint style="warning" %}
 **Reminder**\
-****Consider your OPSEC.
+\*\*\*\*Consider your OPSEC.
 {% endhint %}
 
 * Stop the SMB service on the compromised box. This requires local admin privileges on the box and a reboot to stop the machine from listening on TCP 445;
@@ -237,7 +245,7 @@ While on `CA01`, we can use rubeus `s4u` command, which will:
 
 1. Retrieve a TGT for `offense.local\QUAIIVVE$`;
 2. Perform `S4U2Self`, which is a Kerberos extension that allows a service to obtain a TGS to **itself** on another user's behalf. So in our case, the `CA01` will request a TGS for `QUAIIVVE$@OFFENSE.LOCAL` as `administrator@offense.local`;
-3. Perform `S4U2Proxy`, which is a Kerberos extension that enables services to request TGS tickets to **other** services on behalf of a given user. In this instance, a TGS will be requested for `cifs/ws01.offense.local`, which will allow `CA01` to access `WS01` computer's file system (i.e.,  `c$` share) on behalf of the Domain Admin `administrator@offense.local`:
+3. Perform `S4U2Proxy`, which is a Kerberos extension that enables services to request TGS tickets to **other** services on behalf of a given user. In this instance, a TGS will be requested for `cifs/ws01.offense.local`, which will allow `CA01` to access `WS01` computer's file system (i.e., `c$` share) on behalf of the Domain Admin `administrator@offense.local`:
 
 ```
 PS C:\tools> .\Rubeus.exe s4u /user:QUAIIVVE$ /rc4:3F55290748348504327CDA267FCCA190 /impersonateuser:administrator@offense.local /msdsspn:cifs/ws01.offense.local /ptt /domain:offense.local
@@ -555,9 +563,9 @@ Privileged code execution on `WS01` can also be achieved using impacket's psexec
 {% hint style="info" %}
 **Note**
 
-RBCD for local privilege escalation could also be performed**:**
+RBCD for local privilege escalation could also be performed\*\*:\*\*
 
-* by leveraging a compromised user with SPN set, assuming you have `WRITE` privilege over the computer's you want to compromise, AD object as described [here](https://orangecyberdefense.com/global/blog/sensepost/chaining-multiple-techniques-and-tools-for-domain-takeover-using-rbcd/).&#x20;
+* by leveraging a compromised user with SPN set, assuming you have `WRITE` privilege over the computer's you want to compromise, AD object as described [here](https://orangecyberdefense.com/global/blog/sensepost/chaining-multiple-techniques-and-tools-for-domain-takeover-using-rbcd/).
 * via socks proxy and remote port forwarding as described [here](https://www.praetorian.com/blog/red-team-privilege-escalation-rbcd-based-privilege-escalation-part-2/), which reduces the need to have a Linux box inside the compromised network with an NTLM relay listener set up.
 {% endhint %}
 
