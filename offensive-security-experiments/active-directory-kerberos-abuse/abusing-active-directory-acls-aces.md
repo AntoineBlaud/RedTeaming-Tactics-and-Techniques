@@ -243,6 +243,10 @@ Set-Acl -Path $path -AclObject $acl
 
 ![](../../.gitbook/assets/screenshot-from-2018-11-10-19-09-08.png)
 
+### ExtendedProperties
+
+With this properties you can set **ResourceBasedConstrainedDelegation**
+
 ## References
 
 {% embed url="https://wald0.com/?p=112" %}

